@@ -1,0 +1,16 @@
+# Composer dependencies
+/vendor/
+
+# Environment files (secrets)
+.env
+
+# Node (if you add frontend build tools later)
+node_modules/
+
+# IDE / Editor configs
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
