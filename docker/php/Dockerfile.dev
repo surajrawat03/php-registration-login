@@ -1,0 +1,31 @@
+# docker/php/Dockerfile.dev
+FROM php:8.2-fpm
+
+ARG UID=1000
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install system deps (small, cached layer)
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+    git zip unzip libzip-dev libonig-dev libxml2-dev zlib1g-dev \
+ && docker-php-ext-install pdo pdo_mysql mbstring zip opcache \
+ && rm -rf /var/lib/apt/lists/*
+
+# copy composer from official image
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# set workdir
+WORKDIR /var/www/html
+
+# create appuser with same UID as host to avoid permission issues
+RUN useradd -u ${UID} -ms /bin/bash appuser \
+ && mkdir -p /var/www/html \
+ && chown -R appuser:www-data /var/www/html
+
+# run as appuser by default (dev)
+USER appuser
+
+EXPOSE 9000
+
+# use tini if available for proper signal handling (optional)
+CMD ["php-fpm"]
