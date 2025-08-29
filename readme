@@ -1,28 +1,166 @@
-# User Registration & Login System (PHP + Doctrine + Docker)
 
-A starter project for building a **User Registration and Login System** using:
+## �� Configuration
 
-- **PHP 8 + Doctrine ORM** (database abstraction, entities, repositories)
-- **Nginx + PHP-FPM + MariaDB** (Dockerized)
-- **Composer** for dependency management
-- Secure practices (password hashing, prepared statements, sessions)
+### Database Configuration
+
+The application uses MySQL 8.0 with the following default settings:
+- **Host**: db (Docker service name)
+- **Port**: 3306
+- **Database**: php_login_registration
+- **User**: php_user
+- **Password**: php_password
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `DB_HOST` | Database host | `db` |
+| `DB_PORT` | Database port | `3306` |
+| `DB_NAME` | Database name | `php_login_registration` |
+| `DB_USER` | Database user | `php_user` |
+| `DB_PASS` | Database password | `php_password` |
+| `DB_ROOT_PASS` | MySQL root password | `root_password` |
+| `COMPOSER_ALLOW_SUPERUSER` | Composer superuser flag | `1` |
+
+## ��️ Database Schema
+
+The application creates a `users` table with the following structure:
+
+```sql
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    firstName VARCHAR(100) NOT NULL,
+    lastName VARCHAR(100) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+```
+
+## 🔐 Security Features
+
+- **Password Hashing**: Bcrypt password hashing using PHP's `password_hash()`
+- **SQL Injection Prevention**: Prepared statements via Doctrine DBAL
+- **Session Security**: Secure session management
+- **Input Validation**: Server-side validation for all user inputs
+- **CSRF Protection**: Form-based CSRF protection (implemented in forms)
+
+## 🐳 Docker Commands
+
+### Development
+
+```bash
+# Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+
+# Rebuild containers
+docker-compose up -d --build
+
+# Access PHP container
+docker-compose exec phpLoginRegistration bash
+
+# Run composer commands
+docker-compose exec phpLoginRegistration composer install
+docker-compose exec phpLoginRegistration composer update
+
+# Run migrations
+docker-compose exec phpLoginRegistration php src/migrate.php
+```
+
+### Production
+
+```bash
+# Build production image
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+# Stop production services
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
+```
+
+## 🧪 Testing
+
+The application includes basic functionality testing through the web interface:
+
+1. **Registration Test**: Create a new user account
+2. **Login Test**: Sign in with registered credentials
+3. **Session Test**: Verify session persistence
+4. **Logout Test**: Verify proper session termination
+
+## 🔧 Development
+
+### Adding New Features
+
+1. Create new PHP classes in `src/class/`
+2. Update database schema in `src/class/schemaManager.php`
+3. Run migrations: `php src/migrate.php`
+4. Create corresponding frontend pages in `public/`
+
+### Code Style
+
+- Follow PSR-4 autoloading standards
+- Use namespaces for all classes
+- Follow PSR-12 coding standards
+- Use type hints where possible
+
+## 🚨 Troubleshooting
+
+### Common Issues
+
+1. **Database Connection Error**
+   - Ensure MySQL service is running: `docker-compose ps`
+   - Check environment variables in `.env` file
+   - Verify database exists: `docker-compose exec db mysql -u root -p`
+
+2. **Permission Issues**
+   - Ensure proper file permissions: `chmod -R 755 .`
+   - Check Docker user mapping in Dockerfile
+
+3. **Port Conflicts**
+   - Change ports in `docker-compose.yml` if 9000, 8080, or 3307 are in use
+
+### Logs
+
+```bash
+# View all logs
+docker-compose logs
+
+# View specific service logs
+docker-compose logs phpLoginRegistration
+docker-compose logs web
+docker-compose logs db
+```
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📞 Support
+
+For support and questions:
+- Create an issue in the repository
+- Check the troubleshooting section above
+- Review the Docker logs for error details
 
 ---
 
-## 🚀 Features
-- User registration with password hashing  
-- User login with session handling  
-- Doctrine ORM for database interactions  
-- Dockerized environment for easy setup  
-- Ready for extension (email verification, password reset, roles, etc.)  
-
----
-
-## ⚙️ Setup Instructions
-
-Follow these steps to run the project locally:
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/surajrawat03/php-registration-login.git
-   cd php-registration-login
+**Note**: This is a development-ready PHP registration and login system. For production deployment, ensure to:
+- Change default passwords
+- Configure SSL/TLS
+- Set up proper backup strategies
+- Implement additional security measures
+- Configure proper logging and monitoring
