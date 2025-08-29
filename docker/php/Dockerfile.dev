@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install system deps (small, cached layer)
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-    git zip unzip libzip-dev libonig-dev libxml2-dev zlib1g-dev \
+    git zip unzip libzip-dev libonig-dev libxml2-dev zlib1g-dev mariadb-client \
  && docker-php-ext-install pdo pdo_mysql mbstring zip opcache \
  && rm -rf /var/lib/apt/lists/*
 
