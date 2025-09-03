@@ -14,7 +14,7 @@ class auth
     public function register($firstName, $lastName, $email, $password)
     {
         try {
-              // ✅ Check if email already exists
+              // Check if email already exists
               $qb = doctrine();
               $qb->select('u.id')
                   ->from('users', 'u')
@@ -30,10 +30,10 @@ class auth
                   ];
               }
   
-              // ✅ Hash password
+              // Hash password
               $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
   
-              // ✅ Insert new user
+              // Insert new user
               $qb = doctrine();
               $qb->insert('users')
                   ->values([
@@ -53,8 +53,6 @@ class auth
                   'success' => true,
                   'message' => 'Registration successful! Please login.'
               ];
-  
-
         } catch (\Exception $e) {
             return [
                 'success' => false,

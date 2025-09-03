@@ -91,9 +91,9 @@ class databaseConnection
 
         if (!in_array($dbName, $databases, true)) {
             $serverConn->executeStatement("CREATE DATABASE `$dbName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-            echo "✅ Database `$dbName` created.\n";
+            echo "Database `$dbName` created.\n";
         } else {
-            echo "✅ Database `$dbName` already exists.\n";
+            echo "Database `$dbName` already exists.\n";
         }
     }
 

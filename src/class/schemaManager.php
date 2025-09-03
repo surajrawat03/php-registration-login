@@ -1,17 +1,13 @@
 <?php
 namespace App\class;
 
-use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Comparator;
-use Dotenv\Dotenv;
-use Exception;
 
 class schemaManager
 {
     private $conn;
     private $toSchema;
-    private $fromSchema;
 
     public function __construct()
     {
@@ -58,7 +54,7 @@ class schemaManager
         }
 
         if (empty($queries)) {
-            echo "✅ No changes needed.\n";
+            echo "No changes needed.\n";
             return;
         }
 
